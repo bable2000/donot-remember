@@ -13,7 +13,7 @@
           color="#606266"
           placeholder-color="#a8abb2"
           font-size="14px"
-          font-family="Arial"
+          font-family="sans-serif"
           placeholder="请输入密码"
           style="width: 50%"
         ></DoNotRemember>
@@ -31,7 +31,7 @@
       color="#606266"
       placeholder-color="#a8abb2"
       font-size="14px"
-      font-family="Arial"
+      font-family="sans-serif"
       show-password
       clearable
       :prefix-icon="Search"
@@ -51,17 +51,44 @@
       @input="inputFn"
       @change="changeFn"
     />
+
+    <DnrAntd
+      v-model:value="value"
+      allow-clear
+      color="#606266"
+      placeholder-color="#a8abb2"
+      font-size="14px"
+      font-family="sans-serif"
+      placeholder="请输入密码"
+    >
+      <template #prefix>
+        <user-outlined />
+      </template>
+    </DnrAntd>
+    <a-input-password
+      v-model:value="value"
+      allow-clear
+      placeholder="请输入密码"
+      style="font-weight: sans-serif"
+    >
+      <template #prefix>
+        <user-outlined />
+      </template>
+    </a-input-password>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import DoNotRemember from './DoNotRemember.vue'
-import DnrElm from './DnrElm/index.vue'
+import DnrElm from './ElementPlus/index.vue'
+import DnrAntd from './AntdVue/index.vue'
 import { Calendar, Search, View, Hide } from '@element-plus/icons-vue'
+import { UserOutlined, InfoCircleOutlined } from '@ant-design/icons-vue'
 
 const type = ref<'password' | 'text'>('password')
-const value = ref('123')
+const value = ref('ABC')
+
 const inputFn = (val: string) => {
   console.log(val, 'inputFn')
 }
@@ -69,3 +96,9 @@ const changeFn = (val: string) => {
   console.log(val, 'changeFn')
 }
 </script>
+
+<style lang="css">
+.ant-input {
+  font-family: sans-serif;
+}
+</style>

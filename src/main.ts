@@ -1,11 +1,15 @@
-import "element-plus/dist/index.css";
+import 'element-plus/dist/index.css'
+import 'ant-design-vue/dist/reset.css'
 
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
-import App from "./App.vue";
-const app = createApp(App);
+import App from './App.vue'
+const app = createApp(App)
 
-import ElementPlus from "element-plus";
-app.use(ElementPlus);
+import ElementPlus from 'element-plus'
+app.use(ElementPlus)
 
-app.mount("#app");
+import Antd from 'ant-design-vue'
+app.use(Antd)
+
+app.mount('#app')

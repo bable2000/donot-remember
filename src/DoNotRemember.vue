@@ -1,20 +1,14 @@
 <template>
-  <iframe
-    ref="frameRef"
-    class="el-input_inner"
-    frameborder="0"
-    :src="blobSrc"
-    @load="frameLoad"
-  ></iframe>
+  <iframe ref="frameRef" frameborder="0" :src="blobSrc" @load="frameLoad"></iframe>
 </template>
 
 <script lang="ts" setup>
 // @ts-ignore
 import _srcDoc from './password.html?raw'
-import { ref, useAttrs, watch } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 
 export interface Props {
-  modelValue: string
+  modelValue?: string
   type?: 'password' | 'text'
   placeholder?: string
   fontSize?: string
@@ -40,6 +34,8 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'password',
   placeholder: ''
 })
+const inputVal = ref(props.modelValue)
+
 const emits = defineEmits<Emits>()
 
 let srcDoc: string = _srcDoc
@@ -51,6 +47,7 @@ for (const key in props) {
 
 const blob = new Blob([srcDoc], { type: 'text/html' })
 const blobSrc = URL.createObjectURL(blob)
+onUnmounted(() => URL.revokeObjectURL(blobSrc))
 
 const frameRef = ref<HTMLIFrameElement>()
 const inputRef = ref<HTMLInputElement>()
@@ -63,7 +60,8 @@ watch(
   () => props.modelValue,
   () => {
     if (inputRef.value) {
-      inputRef.value.value = props.modelValue
+      inputVal.value = props.modelValue
+      if (inputRef.value) inputRef.value.value = inputVal.value
     }
   }
 )
@@ -76,7 +74,9 @@ watch(
   }
 )
 const inputSetup = (input: HTMLInputElement) => {
-  input.value = props.modelValue
+  // if (inputRef.value)
+  input.value = inputVal.value
+
   input.addEventListener('compositionstart', (event) => {
     emits('compositionstart', event.data)
   })
@@ -104,6 +104,13 @@ const inputSetup = (input: HTMLInputElement) => {
   })
 }
 defineExpose({
+  get value() {
+    return inputVal.value
+  },
+  set value(val: string) {
+    inputVal.value = val
+    if (inputRef.value) inputRef.value.value = inputVal.value
+  },
   input: inputRef,
   focus() {
     inputRef.value?.focus?.()

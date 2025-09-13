@@ -28,7 +28,6 @@
       </span>
 
       <DoNotRemember
-        :model-value="doNotValue"
         :fontSize="fontSize"
         :fontFamily="fontFamily"
         :color="color"
@@ -330,16 +329,14 @@ const createOnceInitResize = (resizeTextarea: () => void) => {
 // fix: https://github.com/element-plus/element-plus/issues/12074
 const onceInitSizeTextarea = createOnceInitResize(resizeTextarea)
 
-const doNotValue = ref('')
 const setNativeInputValue = () => {
   const input = _ref.value
   const formatterValue = props.formatter
     ? props.formatter(nativeInputValue.value)
     : nativeInputValue.value
   if (!input || input.value === formatterValue) return
+
   input.value = formatterValue
-  // ====
-  doNotValue.value = formatterValue
 }
 
 const handleInput = async (event: Event) => {
